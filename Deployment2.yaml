@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy2
+  template:
+    metadata:
+      labels:
+        app: deploy2
+    spec:
+      containers:
+      - name: deploy2
+        image: paulbouwer/hello-kubernetes:1.8
+        env:
+        -  name: message
+           value: "Hello From Second Deployment"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy2
+  labels:
+    run: deploy2
+spec:
+  selector:
+    name: deploy2
+  type: LoadBalancer
+  ports:
+    -  name: http
+       port: 443
+       targetPort: 443
+       protocol: TCP

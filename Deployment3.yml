@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy3
+  template:
+    metadata:
+      labels:
+        app: deploy3
+    spec:
+      containers:
+      - name: deploy3
+        image: paulbouwer/hello-kubernetes:1.8
+        env:
+        -  name: message
+           value: "Hello From Third Deployment"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy3
+  labels:
+    run: deploy3
+spec:
+  selector:
+    name: deploy3
+  type: NodePort
+  ports:
+    -  name: http
+       port: 443
+       targetPort: 443
+       nodePort: 30038
+       protocol: TCP
